@@ -1,60 +1,44 @@
-# 📊 BTC Sentiment Predictor
+📊 BTC Sentiment Predictor
+Este projeto usa machine learning para prever a direção do preço do Bitcoin, combinando análise de sentimento de tweets e dados históricos de preços. A ideia é simples: se o sentimento nas redes sociais for majoritariamente positivo ou negativo, isso pode influenciar a movimentação do preço do BTC. Com base nessa lógica, o modelo aprende a prever se o próximo movimento será de alta ou baixa.
 
-Este projeto utiliza **machine learning** para prever a direção do preço do Bitcoin com base na **análise de sentimento de tweets** e no **histórico de preços do BTC**.
+🚀 Tecnologias Utilizadas
+Python
 
-A ideia é simples: se o sentimento geral nas redes sociais está positivo ou negativo, isso pode influenciar o movimento de preço do BTC. Com essa lógica, o modelo aprende a classificar se o próximo movimento será de **alta** ou **baixa**.
+Pandas, NumPy
 
----
+Scikit-learn
 
-## 🚀 Tecnologias Utilizadas
+Joblib
 
-- Python
-- Pandas, NumPy
-- Scikit-learn
-- Joblib
-- Jupyter Notebook e VS Code
-- Dados de: CoinGecko + Tweets
+Jupyter Notebook e VS Code
 
----
+Fontes de dados: CoinGecko (preços do Bitcoin) + X (ex-Twitter) (sentimento de tweets)
 
-## 🧠 Etapas do Projeto
+🧠 Etapas do Projeto
+1. Coleta de Dados
+btc_coingecko.csv: Histórico de preços do Bitcoin, contendo dados de preço e timestamp.
 
-### 1. Coleta de Dados
+tweets_btc_com_sentimento.csv: Tweets coletados com a análise de sentimento (positivo, negativo, neutro) usando técnicas de NLP.
 
-- **btc_coingecko.csv**: Histórico de preços do Bitcoin (data, preço).
-- **tweets_btc_com_sentimento.csv**: Tweets com análise de sentimento extraída via NLP (`positivo`, `negativo`, etc).
+2. Pré-processamento dos Dados
+Conversão das datas para o formato datetime para garantir alinhamento correto dos dados.
 
-### 2. Pré-processamento
+Merge de dados: Utilização da função merge_asof para combinar os tweets com os preços históricos do Bitcoin.
 
-- Conversão de datas para `datetime`.
-- Merge de dados via `merge_asof` para alinhar tweets com os horários dos preços.
-- Engenharia de features:
-  - Conversão do sentimento em números (`LabelEncoder`).
-  - Criação da variável `target`: se o preço do dia seguinte é maior que o atual → 1 (alta), senão → 0 (baixa).
+Engenharia de Features:
 
-### 3. Modelagem
+Codificação dos sentimentos com LabelEncoder para transformar as categorias de sentimento em números.
 
-- Modelo: `RandomForestClassifier` com `n_estimators=100`.
-- Divisão dos dados: 80% treino, 20% teste.
-- Treinamento e avaliação.
+Criação da variável target: Se o preço do Bitcoin no dia seguinte é superior ao preço atual, o movimento é classificado como alta (1); caso contrário, baixa (0).
 
-### 4. Exportação
+3. Modelagem e Avaliação
+Modelo: Utilização do RandomForestClassifier com 100 árvores (n_estimators=100).
 
-- Modelo salvo como: `modelo_btc_random_forest.pkl`.
-- Scaler salvo para futura transformação de dados reais.
+Divisão dos dados: 80% para treino e 20% para teste.
 
----
+Avaliação do modelo com métricas de precisão, recall e f1-score para entender o desempenho do modelo.
 
-## 📈 Resultados
+4. Exportação do Modelo
+Modelo treinado salvo como: modelo_btc_random_forest.pkl para reutilização futura.
 
-### Métricas do modelo (exemplo real):
-
-```text
-              precision    recall  f1-score   support
-
-           0       0.81      0.84      0.82        19
-           1       0.87      0.84      0.85        25
-
-    accuracy                           0.84        44
-   macro avg       0.84      0.84      0.84        44
-weighted avg       0.84      0.84      0.84        44
+Scaler também é salvo, permitindo transformar dados novos de forma consistente com os dados de treinamento.
